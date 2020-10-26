@@ -644,11 +644,11 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                         }
                     });
                 
-                ComboBox<String> cbChoiceShopName=new ComboBox<String>(nameShop);  
-                cbChoiceShopName.setValue(" Choice shop name ");
-                    cbChoiceShopName.setOnAction(new EventHandler<ActionEvent>(){
+                ComboBox<String> cbChoiceSellerName=new ComboBox<String>(getSellerList());  
+                cbChoiceSellerName.setValue(" Choice seller name ");
+                    cbChoiceSellerName.setOnAction(new EventHandler<ActionEvent>(){
                         public void handle(ActionEvent ae){
-                            workPlaceEmployee = cbChoiceShopName.getValue();
+                            workPlaceEmployee = cbChoiceSellerName.getValue();
                         }
                     });
                 
@@ -711,7 +711,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 root.add(lastName_label, 2,1);
                 root.add(tfLastName, 3,1);
                 root.add(workPlace_label, 2,2);
-                root.add(cbChoiceShopName, 3,2);
+                root.add(cbChoiceSellerName, 3,2);
                 root.add(employeePosition_label, 2,3); 
                 root.add(tfEmployeePosition, 3,3);
                 root.add(employeePositionRank_label, 2,4);
