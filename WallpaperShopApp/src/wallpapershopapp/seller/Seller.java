@@ -15,6 +15,7 @@ public class Seller {
     String phoneEmployee;
     String addressEmployee;
     static ArrayList<Receipt> receipt;
+    public Seller(){}
     public Seller( String nameF,
             String nameL,
             String place,

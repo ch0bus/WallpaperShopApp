@@ -1,14 +1,14 @@
 package wallpapershopapp;
-
-import wallpapershopapp.seller.Seller;
-import wallpapershopapp.seller.Receipt;
+import wallpapershopapp.seller.*;
 
 import java.awt.Color;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Optional;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,11 +44,11 @@ import javafx.stage.Stage;
 
 public class WallpaperShopApp extends Application {
     
-    ObservableList<String> nameShop = FXCollections.observableArrayList("001 Minsk", "002 Gomel", "004 Mogilev", "005 Brest");
-    ObservableList<String> nameSeler = FXCollections.observableArrayList("001 Igor", "002 Oksana", "004 Irina", "005 Natalia");
-   
+    DecimalFormat decimalFormat = new DecimalFormat( "#.##" );
+    
     ArrayList<Seller> seller = new ArrayList<Seller>();
     int counterOfEmployee;
+    int numberOfEmployee;
     String firstNameEmployee;
     String lastNameEmployee;
     String workPlaceEmployee;
@@ -61,10 +61,13 @@ public class WallpaperShopApp extends Application {
     LocalDate dateReceipt;
     int numberReceipt;
     double amountReceipt;
+   
+    ObservableList<String> nameShop = FXCollections.observableArrayList("001 Minsk", "002 Gomel", "004 Mogilev", "005 Brest");
+    //ObservableList<String> nameSeler = FXCollections.observableArrayList("001 Igor", "002 Oksana", "004 Irina", "005 Natalia");
     
     @Override
     public void start(Stage primaryStage) {
-        
+    
         primaryStage.setResizable(false);                                       // not fullScreen
         
         GridPane root = new GridPane();	        
@@ -384,18 +387,29 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
 
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////Intro Seler Window///////////////////////////////////
-    private GridPane getCenterPaneIntroSelerWindow() {
-                
-            GridPane root=new GridPane();
-            root.setGridLinesVisible(false);
-            root.setHgap(10);
-            root.setVgap(5);
-        
-            Label infoAboutSeller_label=new Label("This section will be contain total info about Sellers");
-            GridPane.setHalignment(infoAboutSeller_label, HPos.CENTER);
-        
-            root.add(infoAboutSeller_label, 0,0);
-        
+    private VBox getCenterPaneIntroSelerWindow() {
+           
+            VBox root = new VBox();
+           
+            numberOfEmployee = seller.size();
+            String numberOfEmployee_str=("Number of employee: ");
+            String numberOfEmployee_decimal = decimalFormat.format(numberOfEmployee);
+            Label numberOfEmployee_value = new Label();
+            numberOfEmployee_value.setText(numberOfEmployee_str+" "+numberOfEmployee_decimal);
+            
+            // total number of seller
+            root.getChildren().addAll(numberOfEmployee_value);
+            
+            if(seller.size()!=0){
+                for(int j=0; j<seller.size(); j++){
+                    Seller sel = seller.get(j);
+                    firstNameEmployee = sel.getFirstName();
+                    lastNameEmployee = sel.getLastName();
+                    String result = ((j+1) +" "+firstNameEmployee+" "+lastNameEmployee );
+                    Label name_label = new Label(result);
+                    root.getChildren().addAll(name_label);                    
+                }
+            }            
             return root;
         }
 ////////////////////////////end Intro Seler Window//////////////////////////////
@@ -443,7 +457,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 Label invoiceAmount_label=new Label("Invoice Amount");
         
                 //ObservableList<String> nameSeler = FXCollections.observableArrayList( "001 Igor", "002 Oksana", "004 Irina", "005 Natalia");
-                ComboBox<String> cbChoiceSelerName=new ComboBox<String>(nameSeler);  
+                ComboBox<String> cbChoiceSelerName=new ComboBox<String>(getSellerList());  
                 cbChoiceSelerName.setValue(" Choice seler name ");
                     cbChoiceSelerName.setOnAction(new EventHandler<ActionEvent>(){
                         public void handle(ActionEvent ae){
@@ -495,7 +509,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 CenterPaneSelerMenu.setCenter(root);
             }
         });
-        
+////////////////////////////////////////////////////////////////////////////////        
         Button btnViewSeler = new Button("View Seler Data");
         btnViewSeler.setMinWidth(150);
         btnViewSeler.setMinHeight(50); 
@@ -527,7 +541,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 Label toDate_label=new Label("to");
         
                 //ObservableList<String> nameSeler = FXCollections.observableArrayList( "All", "001 Igor", "002 Oksana", "004 Irina", "005 Natalia");
-                ComboBox<String> cbChoiceSelerName=new ComboBox<String>(nameSeler);  
+                ComboBox<String> cbChoiceSelerName=new ComboBox<String>(getSellerList());  
                 cbChoiceSelerName.setValue(" Choice seler name ");
                 GridPane.setHalignment(cbChoiceSelerName, HPos.CENTER); 
         
@@ -567,7 +581,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 CenterPaneSelerMenu.setCenter(root);
             }
         });
-        
+////////////////////////////////////////////////////////////////////////////////        
         Button btnAddSeler = new Button("Add new Seler");
         btnAddSeler.setMinWidth(150);
         btnAddSeler.setMinHeight(50);
@@ -577,9 +591,12 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 DatePicker dateBirthDatePicker =  new DatePicker();
                 Locale.setDefault(Locale.GERMANY);  
                 //dateBirthDatePicker.setValue(LocalDate.now());
+                dateBirthEmployee = dateBirthDatePicker.getValue();
+                
                 DatePicker dateEmplDatePicker =  new DatePicker();
                 Locale.setDefault(Locale.GERMANY);  
                 //dateEmplDatePicker.setValue(LocalDate.now());
+                dateOfEmplEmployee = dateEmplDatePicker.getValue();
                 
                 Rectangle photoLabel = new Rectangle(130, 150);
                 Label firstName_label=new Label("First Name");  
@@ -671,10 +688,11 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                         seller.add(newSeller);
                         counterOfEmployee = newSeller.getCounterOfSeller();
                         firstNameEmployee = newSeller.getFirstName();
+                        lastNameEmployee = newSeller.getLastName();
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Add successful");
                         alert.setHeaderText(null);
-                        alert.setContentText("New Seller: #"+counterOfEmployee+" "+firstNameEmployee+" is add.");
+                        alert.setContentText("New Seller was added: \n#"+counterOfEmployee+" "+firstNameEmployee+" "+lastNameEmployee);
                         alert.showAndWait();
                     }
                 });
@@ -713,7 +731,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 
             }
         });        
-        
+////////////////////////////////////////////////////////////////////////////////        
         Button btnDelSeler = new Button("Delete Seler");
         btnDelSeler.setMinWidth(150);
         btnDelSeler.setMinHeight(50);
@@ -731,7 +749,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 GridPane.setHalignment(selerForDelete_label, HPos.CENTER);
         
                 //ObservableList<String> nameSeler = FXCollections.observableArrayList( "All", "001 Igor", "002 Oksana", "004 Irina", "005 Natalia");
-                ComboBox<String> cbChoiceSelerName=new ComboBox<String>(nameSeler);  
+                ComboBox<String> cbChoiceSelerName=new ComboBox<String>(getSellerList());  
                 cbChoiceSelerName.setValue(" Select seller name ");
                 GridPane.setHalignment(cbChoiceSelerName, HPos.CENTER); 
                 CheckBox chekEverybody = new CheckBox("everybody");
@@ -1101,8 +1119,19 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
         
         return CenterPaneShopMenu;
     }
-//////////////////////////////end Shop Menu///////////////////////////////////
+//////////////////////////////end Shop Menu/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////    
 
+ObservableList<String> getSellerList(){
+    String sellerList[] = new String[5];
+    for(int j=0; j<seller.size(); j++){
+        Seller sel = new Seller();
+        sel = seller.get(j);        
+        sellerList[j] =sel.getFirstName()+" "+sel.getLastName();
+    }    
+    ObservableList<String> nameShop = FXCollections.observableArrayList(
+            sellerList[0], sellerList[1], sellerList[2], sellerList[3], sellerList[4]);    
+    return nameShop;
+}
      
 } // end main class
