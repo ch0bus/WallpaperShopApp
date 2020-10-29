@@ -11,24 +11,12 @@ public class Receipt {
         numberReceipt = number;
         amountReceipt = amount;
     }
-// getters
-    public LocalDate getDateReceipt(){
-        return dateReceipt;
-    }
-    public int getNumberReceipt(){
-        return numberReceipt;
-    }
-    public double getAmountReceipt(){
-        return amountReceipt;
-    }
+    // getters
+    public LocalDate getDateReceipt(){ return dateReceipt; }
+    public int getNumberReceipt(){ return numberReceipt; }
+    public double getAmountReceipt(){ return amountReceipt; }
     // setters
-    public void setDateReceipt(LocalDate date){
-        dateReceipt = date;
-    }
-    public void setNumberReceipt(int number){
-        numberReceipt = number;
-    }
-    public void setAmountReceipt(double amount){
-        amountReceipt = amount;
-    }    
+    public void setDateReceipt(LocalDate date){ dateReceipt = date; }
+    public void setNumberReceipt(int number){ numberReceipt = number; }
+    public void setAmountReceipt(double amount){ amountReceipt = amount; }    
 }

@@ -20,6 +20,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -51,6 +52,7 @@ public class WallpaperShopApp extends Application {
     int numberOfEmployee;
     String firstNameEmployee;
     String lastNameEmployee;
+    String sellerTotalName;
     String workPlaceEmployee;
     String employeePosition;
     String employeeRank;
@@ -97,7 +99,11 @@ public class WallpaperShopApp extends Application {
         Button btnExit_bottom = new Button("Exit");
         btnExit_bottom.setMinWidth(100);
         
-        Label scrLabel = new Label("saefewfwef wefrwefwef we wef wefwe fwe\nfwefwefsaefewfwef wefrwefwef we wef wefwe \nfwefwefwef\nsaefewfwef wefrwefwef we wef wefwe fwefwefwefsaefewfwef wefrwefwef we wef wefwe fwefwefwefsaefewfwef \nwefrwefwef we wef wefwe fwefwefwef");
+        Label scrLabel = new Label("saefewfwef wefrwefwef we wef wefwe fwe"
+                + "\nfwefwefsaefewfwef wefrwefwef we wef wefwe "
+                + "\nfwefwefwef saefewfwef wefrwefwef we wef wefwe fwefwefwef "
+                + "\nsaefewfwef wefrwefwef we wef wefwe fwefwefwefsaefewfwef "
+                + "\nwefrwefwef we wef wefwe fwefwefwef");
         
         Button btnPrev = new Button("prev");
         Button btnNext = new Button("next");
@@ -287,8 +293,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
 //////////////////////////////ViewDataMenu/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
     btnViewData.setOnAction(new EventHandler<ActionEvent>() { 
-            public void handle(ActionEvent event) {
-                
+            public void handle(ActionEvent event) {                
                 Stage stageView = new Stage();
             }
     });
@@ -298,22 +303,19 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
 //////////////////////////////CalcMenu//////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
         btnCalc.setOnAction(new EventHandler<ActionEvent>() { 
-            public void handle(ActionEvent event) {
-                
+            public void handle(ActionEvent event) {                
                 Stage stageCalc = new Stage();
             }
     });
 //////////////////////////////end Calc//Menu////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
     btnSetting_bottom.setOnAction(new EventHandler<ActionEvent>() { 
-            public void handle(ActionEvent event) {
-                
+            public void handle(ActionEvent event) {                
                 Stage stageSetting = new Stage();
             }
     });
     btnUpdata_bottom.setOnAction(new EventHandler<ActionEvent>() { 
-            public void handle(ActionEvent event) {
-                
+            public void handle(ActionEvent event) {                
                 Stage stageCalc = new Stage();
             }
     });
@@ -440,7 +442,12 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 root.setHgap(10);
                 root.setVgap(5);
                 
-                Label userLogView_label = new Label("[Add] <Seller> <Date> <#num> <Amount>\n[Add] <Seller> <Date> <#num> <Amount>\n[Del] <Seller> <Date> <#num> <Amount>\n[Add] <Seller> <Date> <#num> <Amount>\n[Add] <Seller> <Date> <#num> <Amount>");
+                //Label userLogView_label = new Label("[Add] <Seller> <Date> <#num> <Amount>"
+                //        + "\n[Add] <Seller> <Date> <#num> <Amount>"
+                //        + "\n[Del] <Seller> <Date> <#num> <Amount>"
+                //        + "\n[Add] <Seller> <Date> <#num> <Amount>"
+                //        + "\n[Add] <Seller> <Date> <#num> <Amount>");
+                Label userLogView_label = new Label();
                 ScrollPane spViewUserLog = new ScrollPane(userLogView_label);
                 spViewUserLog.setMinWidth(350);
                 spViewUserLog.setMinHeight(180);
@@ -448,6 +455,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 DatePicker dateOfSalesDatePicker =  new DatePicker();
                 Locale.setDefault(Locale.GERMANY);  
                 dateOfSalesDatePicker.setValue(LocalDate.now());
+                    dateReceipt = dateOfSalesDatePicker.getValue();
         
                 Rectangle photoLabel = new Rectangle(130, 150);
                 GridPane.setHalignment(photoLabel, HPos.CENTER); 
@@ -461,7 +469,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 cbChoiceSelerName.setValue(" Choice seler name ");
                     cbChoiceSelerName.setOnAction(new EventHandler<ActionEvent>(){
                         public void handle(ActionEvent ae){
-                            firstNameEmployee = cbChoiceSelerName.getValue();
+                            sellerTotalName = cbChoiceSelerName.getValue();
                         }
                     });
                     
@@ -483,10 +491,32 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 GridPane.setHalignment(btnUndoLast, HPos.CENTER); 
                 btnUndoLast.setMinWidth(100);
                 btnUndoLast.setMinHeight(25);
+                
                 Button btnAddInvoice=new Button ("Add Invoice");
                 GridPane.setHalignment(btnAddInvoice, HPos.CENTER); 
                 btnAddInvoice.setMinWidth(150);
                 btnAddInvoice.setMinHeight(50);
+                btnAddInvoice.setOnAction(new EventHandler<ActionEvent>() { 
+                    public void handle(ActionEvent event) {
+                        
+                        Receipt receipt = new Receipt(dateReceipt, numberReceipt, amountReceipt);
+                        
+                        Alert alert = new Alert(AlertType.CONFIRMATION);
+                        alert.setTitle("Add Receipt");
+                        alert.setHeaderText("Name: "+sellerTotalName);
+                        alert.setContentText("Date: "+dateReceipt+"\nReceipt: #"+numberReceipt+"\nAmount: "+amountReceipt+" rub.");
+
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == ButtonType.OK){
+                            // ... user chose OK
+                            //System.exit(0);
+                            userLogView_label.setText("[Add] <"+sellerTotalName+"> <"+dateReceipt+"> <"+numberReceipt+"> <"+amountReceipt+">");
+                        } else {
+                        // ... user chose CANCEL or closed the dialog
+                        }
+                    }
+                    });
+                
                 Button btnClean=new Button ("Clean");
                 GridPane.setHalignment(btnClean, HPos.CENTER); 
                 btnClean.setMinWidth(100);
