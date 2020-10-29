@@ -448,14 +448,18 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 //        + "\n[Add] <Seller> <Date> <#num> <Amount>"
                 //        + "\n[Add] <Seller> <Date> <#num> <Amount>");
                 Label userLogView_label = new Label();
-                ScrollPane spViewUserLog = new ScrollPane(userLogView_label);
+                ScrollPane spViewUserLog = new ScrollPane();
                 spViewUserLog.setMinWidth(350);
                 spViewUserLog.setMinHeight(180);
                 
                 DatePicker dateOfSalesDatePicker =  new DatePicker();
                 Locale.setDefault(Locale.GERMANY);  
                 dateOfSalesDatePicker.setValue(LocalDate.now());
-                    dateReceipt = dateOfSalesDatePicker.getValue();
+                dateOfSalesDatePicker.setOnAction(new EventHandler() {
+                    public void handle(Event t) {
+                        dateReceipt = dateOfSalesDatePicker.getValue();
+                    }
+                });
         
                 Rectangle photoLabel = new Rectangle(130, 150);
                 GridPane.setHalignment(photoLabel, HPos.CENTER); 
@@ -505,12 +509,11 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                         alert.setTitle("Add Receipt");
                         alert.setHeaderText("Name: "+sellerTotalName);
                         alert.setContentText("Date: "+dateReceipt+"\nReceipt: #"+numberReceipt+"\nAmount: "+amountReceipt+" rub.");
-
+                            
                         Optional<ButtonType> result = alert.showAndWait();
                         if (result.get() == ButtonType.OK){
-                            // ... user chose OK
-                            //System.exit(0);
                             userLogView_label.setText("[Add] <"+sellerTotalName+"> <"+dateReceipt+"> <"+numberReceipt+"> <"+amountReceipt+">");
+                            spViewUserLog.setContent(userLogView_label);
                         } else {
                         // ... user chose CANCEL or closed the dialog
                         }
@@ -620,13 +623,19 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 
                 DatePicker dateBirthDatePicker =  new DatePicker();
                 Locale.setDefault(Locale.GERMANY);  
-                //dateBirthDatePicker.setValue(LocalDate.now());
-                dateBirthEmployee = dateBirthDatePicker.getValue();
+                dateBirthDatePicker.setOnAction(new EventHandler() {
+                    public void handle(Event t) {
+                        dateBirthEmployee = dateBirthDatePicker.getValue();
+                    }
+                });
                 
                 DatePicker dateEmplDatePicker =  new DatePicker();
                 Locale.setDefault(Locale.GERMANY);  
-                //dateEmplDatePicker.setValue(LocalDate.now());
-                dateOfEmplEmployee = dateEmplDatePicker.getValue();
+                dateEmplDatePicker.setOnAction(new EventHandler() {
+                    public void handle(Event t) {
+                        dateOfEmplEmployee = dateEmplDatePicker.getValue();
+                    }
+                });                
                 
                 Rectangle photoLabel = new Rectangle(130, 150);
                 Label firstName_label=new Label("First Name");  
@@ -675,7 +684,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                     });
                 
                 ComboBox<String> cbChoiceSellerName=new ComboBox<String>(getSellerList());  
-                cbChoiceSellerName.setValue(" Choice seller name ");
+                cbChoiceSellerName.setValue(" Shop Address");
                     cbChoiceSellerName.setOnAction(new EventHandler<ActionEvent>(){
                         public void handle(ActionEvent ae){
                             workPlaceEmployee = cbChoiceSellerName.getValue();
