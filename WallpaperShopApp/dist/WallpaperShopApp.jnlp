@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="WallpaperShopApp.jnlp">
+  <information>
+    <title>WallpaperShopApp</title>
+    <vendor>Администратор</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="WallpaperShopApp.jar" size="56993" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="800" height="600" main-class="wallpapershopapp.WallpaperShopApp"  name="WallpaperShopApp" />
+  <update check="always"/>
+</jnlp>
