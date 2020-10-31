@@ -515,7 +515,8 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                             userLogView_label.setText("[Add] <"+sellerTotalName+"> <"+dateReceipt+"> <"+numberReceipt+"> <"+amountReceipt+">");
                             spViewUserLog.setContent(userLogView_label);
                         } else {
-                        // ... user chose CANCEL or closed the dialog
+                            // ... user chose CANCEL or closed the dialog
+                            userLogView_label.setText("");
                         }
                     }
                     });
@@ -582,20 +583,29 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 GridPane.setHalignment(btnViewData, HPos.CENTER); 
                 btnViewData.setMinWidth(200);
                 btnViewData.setMinHeight(50);
+                
                 Button btnDiscard=new Button ("Discard");
                 GridPane.setHalignment(btnDiscard, HPos.CENTER); 
                 btnDiscard.setMinWidth(100);
                 btnDiscard.setMinHeight(25);
+                
                 Button btnSelerPrivateInfo=new Button ("Private Info");
                 GridPane.setHalignment(btnSelerPrivateInfo, HPos.CENTER); 
                 btnSelerPrivateInfo.setMinWidth(100);
                 btnSelerPrivateInfo.setMinHeight(25);
+                    btnSelerPrivateInfo.setOnAction(new EventHandler<ActionEvent>() { 
+                        public void handle(ActionEvent event) {
+                            
+                            //view seller data!!!
+                            showPrivateInfoSeller();
+                        }
+                });
         
                 CheckBox chekEverybody = new CheckBox("everybody");
                 GridPane.setHalignment(chekEverybody, HPos.CENTER);
                 chekEverybody.setOnAction(new EventHandler<ActionEvent>(){
                     public void handle(ActionEvent ae){
-                
+                    
                     }
                 });
         
@@ -850,7 +860,12 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
             }
         });
         
-        VBox leftPane = new VBox(btnAddInvoice,btnViewSeler,btnAddSeler,btnDelSeler);
+        Label spaceLabel_1 = new Label("");
+        Label spaceLabel_2 = new Label("");
+        Label spaceLabel_3 = new Label("");
+        Label spaceLabel_4 = new Label("");
+                
+        VBox leftPane = new VBox(btnAddInvoice,spaceLabel_1,btnViewSeler,spaceLabel_2,btnAddSeler,spaceLabel_3,btnDelSeler);
         leftPane.setStyle("-fx-padding: 10;");
         
         CenterPaneSelerMenu.setLeft(leftPane);
@@ -1137,8 +1152,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                     }   
             
                 }
-            });
-        
+            });        
            
             root.add(selerForDelete_label, 0,0, 3,1);
             root.add(cbChoiceShopName, 1,3, 3,1);
@@ -1171,6 +1185,162 @@ ObservableList<String> getSellerList(){
     ObservableList<String> nameShop = FXCollections.observableArrayList(
             sellerList[0], sellerList[1], sellerList[2], sellerList[3], sellerList[4]);    
     return nameShop;
+}
+
+void showPrivateInfoSeller(){
+    
+    Stage privateInfoSeller = new Stage();
+    privateInfoSeller.setResizable(true);
+    
+    GridPane gpSellerInfo = new GridPane();
+    gpSellerInfo.setHgap(10);
+    gpSellerInfo.setVgap(5);		
+    gpSellerInfo.setGridLinesVisible(false); 
+    
+    DatePicker dateBirthDatePicker =  new DatePicker();
+                Locale.setDefault(Locale.GERMANY);  
+                dateBirthDatePicker.setOnAction(new EventHandler() {
+                    public void handle(Event t) {
+                        dateBirthEmployee = dateBirthDatePicker.getValue();
+                    }
+                });
+                
+                DatePicker dateEmplDatePicker =  new DatePicker();
+                Locale.setDefault(Locale.GERMANY);  
+                dateEmplDatePicker.setOnAction(new EventHandler() {
+                    public void handle(Event t) {
+                        dateOfEmplEmployee = dateEmplDatePicker.getValue();
+                    }
+                });                
+                
+                Rectangle photoLabel = new Rectangle(130, 150);
+                Label firstName_label=new Label("First Name");  
+                Label lastName_label=new Label("Last Name");
+                Label workPlace_label=new Label("Work Place");
+                Label employeePosition_label=new Label("Employee position");
+                Label employeePositionRank_label=new Label("Rank");
+                Label dateBirth_label=new Label("Date of Birth");
+                Label dateEmpl_label=new Label("Employment date");
+                Label phoneNumber_label=new Label("Phone number");
+                Label employeeHomeAdress_label=new Label("Home Adress");
+        
+                TextField tfFirstName=new TextField();  
+                    tfFirstName.setOnAction(new EventHandler<ActionEvent>(){
+                        public void handle(ActionEvent ae){
+                            firstNameEmployee = tfFirstName.getText();
+                        }
+                    });
+                    
+                TextField tfLastName=new TextField();
+                    tfLastName.setOnAction(new EventHandler<ActionEvent>(){
+                        public void handle(ActionEvent ae){
+                            lastNameEmployee = tfLastName.getText();
+                        }
+                    });
+                    
+                TextField tfEmployeePosition=new TextField();
+                    tfEmployeePosition.setOnAction(new EventHandler<ActionEvent>(){
+                        public void handle(ActionEvent ae){
+                            employeePosition = tfEmployeePosition.getText();
+                        }
+                    });
+                    
+                TextField tfEmployeePositionRank=new TextField();
+                    tfEmployeePositionRank.setOnAction(new EventHandler<ActionEvent>(){
+                        public void handle(ActionEvent ae){
+                            employeeRank = tfEmployeePositionRank.getText();
+                        }
+                    });
+                
+                TextField tfPhoneNumber=new TextField();
+                     tfPhoneNumber.setOnAction(new EventHandler<ActionEvent>(){
+                        public void handle(ActionEvent ae){
+                            phoneEmployee = tfPhoneNumber.getText();
+                        }
+                    });
+                
+                ComboBox<String> cbChoiceSellerName=new ComboBox<String>(getSellerList());  
+                cbChoiceSellerName.setValue(" Shop Address");
+                    cbChoiceSellerName.setOnAction(new EventHandler<ActionEvent>(){
+                        public void handle(ActionEvent ae){
+                            workPlaceEmployee = cbChoiceSellerName.getValue();
+                        }
+                    });
+                
+                TextArea taHomeAddressSeler = new TextArea();
+                taHomeAddressSeler.setPrefColumnCount(30);
+                taHomeAddressSeler.setPrefRowCount(3);
+                VBox.setVgrow(taHomeAddressSeler, Priority.ALWAYS);
+                    addressEmployee = taHomeAddressSeler.getText();
+                
+                Button btnChangePhoto=new Button ("add photo"); 
+                GridPane.setHalignment(btnChangePhoto, HPos.CENTER); 
+                btnChangePhoto.setMinWidth(100);
+                btnChangePhoto.setMinHeight(25);
+                
+                Button btnDiscard=new Button ("Discard");
+                GridPane.setHalignment(btnDiscard, HPos.CENTER); 
+                btnDiscard.setMinWidth(100);
+                btnDiscard.setMinHeight(25);
+                btnDiscard.setOnAction(new EventHandler<ActionEvent>() { 
+                    public void handle(ActionEvent event) {
+            
+                   }
+                });
+                
+                Button btnClose=new Button ("Close");
+                GridPane.setHalignment(btnClose, HPos.CENTER); 
+                btnClose.setMinWidth(100);
+                btnClose.setMinHeight(25);
+                btnClose.setOnAction(new EventHandler<ActionEvent>() { 
+                    public void handle(ActionEvent event) {
+                         privateInfoSeller.close();
+                    }
+                });
+                
+                Button btnSave=new Button ("Save");
+                GridPane.setHalignment(btnSave, HPos.LEFT); 
+                btnSave.setMinWidth(200);
+                btnSave.setMinHeight(25);
+                    btnSave.setOnAction(new EventHandler<ActionEvent>() { 
+                        public void handle(ActionEvent event) {
+            
+                    }
+                });
+                
+                gpSellerInfo.setHgap(10);
+                gpSellerInfo.setVgap(5);
+        
+                gpSellerInfo.add(photoLabel, 1,0, 1,6);
+                gpSellerInfo.add(btnChangePhoto, 0,6, 2,1);
+                gpSellerInfo.add(firstName_label, 2,0);
+                gpSellerInfo.add(tfFirstName, 3,0);
+                gpSellerInfo.add(lastName_label, 2,1);
+                gpSellerInfo.add(tfLastName, 3,1);
+                gpSellerInfo.add(workPlace_label, 2,2);
+                gpSellerInfo.add(cbChoiceSellerName, 3,2);
+                gpSellerInfo.add(employeePosition_label, 2,3); 
+                gpSellerInfo.add(tfEmployeePosition, 3,3);
+                gpSellerInfo.add(employeePositionRank_label, 2,4);
+                gpSellerInfo.add(tfEmployeePositionRank, 3,4);
+                gpSellerInfo.add(dateBirth_label, 2,5);
+                gpSellerInfo.add(dateBirthDatePicker, 3,5);
+                gpSellerInfo.add(dateEmpl_label, 2,6);
+                gpSellerInfo.add(dateEmplDatePicker, 3,6);
+                gpSellerInfo.add(phoneNumber_label, 2,7);
+                gpSellerInfo.add(tfPhoneNumber, 3,7);
+                gpSellerInfo.add(employeeHomeAdress_label, 2,8);
+                gpSellerInfo.add(taHomeAddressSeler, 3,8);
+                gpSellerInfo.add(btnDiscard, 1,13, 2,1);
+                gpSellerInfo.add(btnSave, 3,13);
+                gpSellerInfo.add(btnClose, 4,13);
+                
+    Scene scene = new Scene(gpSellerInfo, 750, 380);
+    privateInfoSeller.setTitle("Second Stage");
+    privateInfoSeller.setScene(scene);
+    
+    privateInfoSeller.show();
+    
 }
      
 } // end main class
