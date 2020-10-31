@@ -52,6 +52,7 @@ public class WallpaperShopApp extends Application {
     int numberOfEmployee;
     String firstNameEmployee;
     String lastNameEmployee;
+    String sellerNameFromList;
     String sellerTotalName;
     String workPlaceEmployee;
     String employeePosition;
@@ -577,8 +578,14 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 //ObservableList<String> nameSeler = FXCollections.observableArrayList( "All", "001 Igor", "002 Oksana", "004 Irina", "005 Natalia");
                 ComboBox<String> cbChoiceSelerName=new ComboBox<String>(getSellerList());  
                 cbChoiceSelerName.setValue(" Choice seler name ");
-                GridPane.setHalignment(cbChoiceSelerName, HPos.CENTER); 
-        
+                GridPane.setHalignment(cbChoiceSelerName, HPos.CENTER);
+                cbChoiceSelerName.setOnAction(new EventHandler<ActionEvent>(){
+                    public void handle(ActionEvent ae){
+                        sellerNameFromList = cbChoiceSelerName.getValue();
+                    }
+                });
+                        
+                
                 Button btnViewData=new Button ("View Data");   
                 GridPane.setHalignment(btnViewData, HPos.CENTER); 
                 btnViewData.setMinWidth(200);
@@ -595,9 +602,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 btnSelerPrivateInfo.setMinHeight(25);
                     btnSelerPrivateInfo.setOnAction(new EventHandler<ActionEvent>() { 
                         public void handle(ActionEvent event) {
-                            
-                            //view seller data!!!
-                            showPrivateInfoSeller();
+                            showPrivateInfoSeller(sellerNameFromList);
                         }
                 });
         
@@ -1175,6 +1180,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
 //////////////////////////////end Shop Menu/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////    
 
+// for ComboBox
 ObservableList<String> getSellerList(){
     String sellerList[] = new String[5];
     for(int j=0; j<seller.size(); j++){
@@ -1187,8 +1193,18 @@ ObservableList<String> getSellerList(){
     return nameShop;
 }
 
-void showPrivateInfoSeller(){
+void showPrivateInfoSeller(String name){
     
+    int indexSeller=0;
+    Seller sel = new Seller();
+        for(int j=0; j<seller.size(); j++){
+            sel = seller.get(j);
+            if(sellerNameFromList.equals(sel.getFirstName()+" "+sel.getLastName())){
+                indexSeller = j;
+            }
+        }
+    sel = seller.get(indexSeller);
+        
     Stage privateInfoSeller = new Stage();
     privateInfoSeller.setResizable(true);
     
@@ -1198,82 +1214,41 @@ void showPrivateInfoSeller(){
     gpSellerInfo.setGridLinesVisible(false); 
     
     DatePicker dateBirthDatePicker =  new DatePicker();
-                Locale.setDefault(Locale.GERMANY);  
-                dateBirthDatePicker.setOnAction(new EventHandler() {
-                    public void handle(Event t) {
-                        dateBirthEmployee = dateBirthDatePicker.getValue();
-                    }
-                });
+    Locale.setDefault(Locale.GERMANY);  
+    dateBirthDatePicker.setValue(sel.getDateBirth());
+    
+    DatePicker dateEmplDatePicker =  new DatePicker();
+    Locale.setDefault(Locale.GERMANY);  
+    dateEmplDatePicker.setValue(sel.getDateEmplpoee());
                 
-                DatePicker dateEmplDatePicker =  new DatePicker();
-                Locale.setDefault(Locale.GERMANY);  
-                dateEmplDatePicker.setOnAction(new EventHandler() {
-                    public void handle(Event t) {
-                        dateOfEmplEmployee = dateEmplDatePicker.getValue();
-                    }
-                });                
-                
-                Rectangle photoLabel = new Rectangle(130, 150);
-                Label firstName_label=new Label("First Name");  
-                Label lastName_label=new Label("Last Name");
-                Label workPlace_label=new Label("Work Place");
-                Label employeePosition_label=new Label("Employee position");
-                Label employeePositionRank_label=new Label("Rank");
-                Label dateBirth_label=new Label("Date of Birth");
-                Label dateEmpl_label=new Label("Employment date");
-                Label phoneNumber_label=new Label("Phone number");
-                Label employeeHomeAdress_label=new Label("Home Adress");
+    Rectangle photoLabel = new Rectangle(130, 150);
+    Label firstName_label=new Label("First Name");  
+    Label lastName_label=new Label("Last Name");
+    Label workPlace_label=new Label("Work Place");
+    Label employeePosition_label=new Label("Employee position");
+    Label employeePositionRank_label=new Label("Rank");
+    Label dateBirth_label=new Label("Date of Birth");
+    Label dateEmpl_label=new Label("Employment date");
+    Label phoneNumber_label=new Label("Phone number");
+    Label employeeHomeAdress_label=new Label("Home Adress");
         
-                TextField tfFirstName=new TextField();  
-                    tfFirstName.setOnAction(new EventHandler<ActionEvent>(){
-                        public void handle(ActionEvent ae){
-                            firstNameEmployee = tfFirstName.getText();
-                        }
-                    });
-                    
-                TextField tfLastName=new TextField();
-                    tfLastName.setOnAction(new EventHandler<ActionEvent>(){
-                        public void handle(ActionEvent ae){
-                            lastNameEmployee = tfLastName.getText();
-                        }
-                    });
-                    
-                TextField tfEmployeePosition=new TextField();
-                    tfEmployeePosition.setOnAction(new EventHandler<ActionEvent>(){
-                        public void handle(ActionEvent ae){
-                            employeePosition = tfEmployeePosition.getText();
-                        }
-                    });
-                    
-                TextField tfEmployeePositionRank=new TextField();
-                    tfEmployeePositionRank.setOnAction(new EventHandler<ActionEvent>(){
-                        public void handle(ActionEvent ae){
-                            employeeRank = tfEmployeePositionRank.getText();
-                        }
-                    });
+    TextField tfFirstName=new TextField( sel.getFirstName() );  
+    TextField tfLastName=new TextField( sel.getLastName() );
+    TextField tfEmployeePosition=new TextField( sel.getEmployeePosition() );
+    TextField tfEmployeePositionRank=new TextField( sel.getEmployeeRank() );
+    TextField tfPhoneNumber=new TextField( sel.getPhoneEmployee() );
                 
-                TextField tfPhoneNumber=new TextField();
-                     tfPhoneNumber.setOnAction(new EventHandler<ActionEvent>(){
-                        public void handle(ActionEvent ae){
-                            phoneEmployee = tfPhoneNumber.getText();
-                        }
-                    });
+    ComboBox<String> cbChoiceSellerName=new ComboBox<String>(getSellerList());  
+    cbChoiceSellerName.setValue(" Shop Address");
+    cbChoiceSellerName.setOnAction(new EventHandler<ActionEvent>(){
+        public void handle(ActionEvent ae){
+            workPlaceEmployee = cbChoiceSellerName.getValue();
+        }
+    });
                 
-                ComboBox<String> cbChoiceSellerName=new ComboBox<String>(getSellerList());  
-                cbChoiceSellerName.setValue(" Shop Address");
-                    cbChoiceSellerName.setOnAction(new EventHandler<ActionEvent>(){
-                        public void handle(ActionEvent ae){
-                            workPlaceEmployee = cbChoiceSellerName.getValue();
-                        }
-                    });
+    TextArea taHomeAddressSeler = new TextArea( sel.getAddressEmployee() );
                 
-                TextArea taHomeAddressSeler = new TextArea();
-                taHomeAddressSeler.setPrefColumnCount(30);
-                taHomeAddressSeler.setPrefRowCount(3);
-                VBox.setVgrow(taHomeAddressSeler, Priority.ALWAYS);
-                    addressEmployee = taHomeAddressSeler.getText();
-                
-                Button btnChangePhoto=new Button ("add photo"); 
+                Button btnChangePhoto=new Button ("Change"); 
                 GridPane.setHalignment(btnChangePhoto, HPos.CENTER); 
                 btnChangePhoto.setMinWidth(100);
                 btnChangePhoto.setMinHeight(25);
@@ -1335,7 +1310,7 @@ void showPrivateInfoSeller(){
                 gpSellerInfo.add(btnSave, 3,13);
                 gpSellerInfo.add(btnClose, 4,13);
                 
-    Scene scene = new Scene(gpSellerInfo, 750, 380);
+    Scene scene = new Scene(gpSellerInfo, 800, 380);
     privateInfoSeller.setTitle("Second Stage");
     privateInfoSeller.setScene(scene);
     
