@@ -505,7 +505,7 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 btnAddInvoice.setOnAction(new EventHandler<ActionEvent>() { 
                     public void handle(ActionEvent event) {
                         
-                        Receipt receipt = new Receipt(dateReceipt, numberReceipt, amountReceipt);
+                        //Receipt receipt = new Receipt(dateReceipt, numberReceipt, amountReceipt);
                         
                         Alert alert = new Alert(AlertType.CONFIRMATION);
                         alert.setTitle("Add Receipt");
@@ -514,6 +514,9 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                             
                         Optional<ButtonType> result = alert.showAndWait();
                         if (result.get() == ButtonType.OK){
+                            
+                        ???    seller.get(numberReceipt).setReceipt(dateReceipt, numberReceipt, amountReceipt);
+                            
                             userLogView_label.setText("[Add] <"+sellerTotalName+"> <"+dateReceipt+"> <"+numberReceipt+"> <"+amountReceipt+">");
                             spViewUserLog.setContent(userLogView_label);
                         } else {
@@ -1228,7 +1231,13 @@ void removeSeller( String name ){
             seller.remove(indexSeller);
         }
 }
-
+/*
+void setReceipt(String name, LocalDate date, int number, double amount){
+    Seller sel = new Seller();
+    sel = getSellerNameFromArrayList(name);
+    sel.setReceipt(date, number, amount);
+}
+*/
 void showPrivateInfoSeller(String name){
     Seller sel = new Seller();
     sel = getSellerNameFromArrayList(name);    

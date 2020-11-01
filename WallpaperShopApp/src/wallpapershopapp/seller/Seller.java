@@ -16,7 +16,8 @@ public class Seller {
     String addressEmployee;
     static ArrayList<Receipt> receipt;
     public Seller(){}
-    public Seller( String nameF,
+    public Seller( 
+            String nameF,
             String nameL,
             String place,
             String pos,
@@ -48,6 +49,10 @@ public class Seller {
     public String getPhoneEmployee(){ return phoneEmployee; }
     public String getAddressEmployee(){ return addressEmployee; }
     
+    public void setReceipt(LocalDate date, int number, double amount){
+        Receipt newReceipt = new Receipt(date,number,amount);
+        receipt.add(newReceipt);
+    }
     public void setFirstName(String name){ firstName = name; }
     public void setLastName(String name){ lastName = name; }
     public void setWorkPlace(String place){ workPlace = place; }
@@ -74,6 +79,4 @@ public class Seller {
     public void removeLastReceipt(){
         receipt.remove(receipt.size()-1);
     }
-    
-   
 }
