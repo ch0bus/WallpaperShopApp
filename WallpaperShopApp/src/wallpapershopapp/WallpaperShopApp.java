@@ -48,6 +48,7 @@ public class WallpaperShopApp extends Application {
     DecimalFormat decimalFormat = new DecimalFormat( "#.##" );
     
     ArrayList<Seller> seller = new ArrayList<Seller>();
+    
     int counterOfEmployee;
     int numberOfEmployee;
     String firstNameEmployee;
@@ -805,12 +806,17 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 //ObservableList<String> nameSeler = FXCollections.observableArrayList( "All", "001 Igor", "002 Oksana", "004 Irina", "005 Natalia");
                 ComboBox<String> cbChoiceSelerName=new ComboBox<String>(getSellerList());  
                 cbChoiceSelerName.setValue(" Select seller name ");
-                GridPane.setHalignment(cbChoiceSelerName, HPos.CENTER); 
+                GridPane.setHalignment(cbChoiceSelerName, HPos.CENTER);
+                cbChoiceSelerName.setOnAction(new EventHandler<ActionEvent>(){
+                    public void handle(ActionEvent ae){
+                        sellerNameFromList = cbChoiceSelerName.getValue();
+                    }
+                });
                 CheckBox chekEverybody = new CheckBox("everybody");
                 GridPane.setHalignment(chekEverybody, HPos.CENTER);
                 chekEverybody.setOnAction(new EventHandler<ActionEvent>(){
                     public void handle(ActionEvent ae){
-                
+                        sellerNameFromList = "ALL";
                     }
                 });
         
@@ -822,12 +828,13 @@ btnShopMenu.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent ae){
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Remove");
-                    alert.setHeaderText("Are You sure want move seller data to delete?");
+                    alert.setHeaderText("Are You sure want delete seller data \n"+sellerNameFromList);
                     alert.setContentText("Click \"ok\" to delete data.");
 
                     Optional<ButtonType> result = alert.showAndWait();
                     if (result.get() == ButtonType.OK){
                         // ... user chose OK
+                        removeSeller(sellerNameFromList);
                     } else {
                         // ... user chose CANCEL or closed the dialog
                     }   
@@ -1188,13 +1195,12 @@ ObservableList<String> getSellerList(){
         sel = seller.get(j);        
         sellerList[j] =sel.getFirstName()+" "+sel.getLastName();
     }    
-    ObservableList<String> nameShop = FXCollections.observableArrayList(
+    ObservableList<String> nameSeller = FXCollections.observableArrayList(
             sellerList[0], sellerList[1], sellerList[2], sellerList[3], sellerList[4]);    
-    return nameShop;
+    return nameSeller;
 }
 
-void showPrivateInfoSeller(String name){
-    
+Seller getSellerNameFromArrayList( String searchName ){
     int indexSeller=0;
     Seller sel = new Seller();
         for(int j=0; j<seller.size(); j++){
@@ -1203,8 +1209,30 @@ void showPrivateInfoSeller(String name){
                 indexSeller = j;
             }
         }
-    sel = seller.get(indexSeller);
-        
+    return seller.get(indexSeller);
+}
+
+void removeSeller( String name ){
+    int indexSeller=0;
+    Seller sel = new Seller();
+        if(sellerNameFromList=="ALL"){
+            seller.removeAll(seller);
+        }
+        else{
+            for(int j=0; j<=seller.size(); j++){
+                sel = seller.get(j);
+                if(sellerNameFromList.equals(sel.getFirstName()+" "+sel.getLastName())){
+                    indexSeller = j;
+                }            
+            }
+            seller.remove(indexSeller);
+        }
+}
+
+void showPrivateInfoSeller(String name){
+    Seller sel = new Seller();
+    sel = getSellerNameFromArrayList(name);    
+    
     Stage privateInfoSeller = new Stage();
     privateInfoSeller.setResizable(true);
     
