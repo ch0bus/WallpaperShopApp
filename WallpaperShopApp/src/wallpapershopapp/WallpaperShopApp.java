@@ -1219,7 +1219,7 @@ void removeSeller( String name ){
             seller.removeAll(seller);
         }
         else{
-            for(int j=0; j<=seller.size(); j++){
+            for(int j=0; j<seller.size(); j++){
                 sel = seller.get(j);
                 if(sellerNameFromList.equals(sel.getFirstName()+" "+sel.getLastName())){
                     indexSeller = j;
